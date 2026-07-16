@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Joppler Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="badge">Joppler</div>
+        <h1>Android clipping, tuned for Joplin</h1>
+        <p>
+          The first line is always the note title. The rest is kept as Markdown so you can share or paste with
+          less cleanup.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Header</h2>
+        <label class="row">
+          <input type="checkbox" id="include-url" />
+          <span>
+            <strong>Include source link</strong>
+            <small>Keep the original page URL under the title.</small>
+          </span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="include-author" />
+          <span>
+            <strong>Include author</strong>
+            <small>Show the article author in the header line.</small>
+          </span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="include-date" />
+          <span>
+            <strong>Include date</strong>
+            <small>Show the publication date as a separate line.</small>
+          </span>
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>Behavior</h2>
+        <label class="row">
+          <input type="checkbox" id="auto-copy" />
+          <span>
+            <strong>Copy after clipping</strong>
+            <small>Automatically copy the result to the clipboard.</small>
+          </span>
+        </label>
+        <label class="row">
+          <input type="checkbox" id="remove-images" />
+          <span>
+            <strong>Remove images</strong>
+            <small>Strip images from the clipped Markdown.</small>
+          </span>
+        </label>
+      </section>
+
+      <div id="status" class="status" aria-live="polite">Settings saved</div>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>
