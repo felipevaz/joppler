@@ -4,6 +4,15 @@ function extractTitle(markdown) {
   return match ? match[1].trim() : firstLine;
 }
 
+function createButton(className, id, label) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = className;
+  button.id = id;
+  button.textContent = label;
+  return button;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const markdown = params.get("text1") || "";
@@ -12,31 +21,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("main-container");
   if (!container) return;
 
-  const safeMarkdown = markdown
-    ? markdown.replace(/[<>&"'`]/g, (ch) => ({
-        "<": "&lt;",
-        ">": "&gt;",
-        "&": "&amp;",
-        '"': "&quot;",
-        "'": "&#39;",
-        "`": "&#96;"
-      }[ch] || ch))
-    : "";
+  const shell = document.createElement("section");
+  shell.className = "clip-shell";
 
-  container.innerHTML = `
-    <section class="clip-shell">
-      <h2 class="title">Ready to share</h2>
-      <div class="actions">
-        <button class="action-btn primary" id="shareBtn" type="button">Share to Joplin</button>
-        <button class="action-btn secondary" id="copyBtn" type="button">Copy to clipboard</button>
-      </div>
-      <pre class="preview" id="preview">${safeMarkdown}</pre>
-    </section>
-  `;
+  const title = document.createElement("h2");
+  title.className = "title";
+  title.textContent = "Ready to share";
+  shell.appendChild(title);
 
-  const shareBtn = document.getElementById("shareBtn");
-  const copyBtn = document.getElementById("copyBtn");
-  const preview = document.getElementById("preview");
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const shareBtn = createButton("action-btn primary", "shareBtn", "Share to Joplin");
+  const copyBtn = createButton("action-btn secondary", "copyBtn", "Copy to clipboard");
+  actions.appendChild(shareBtn);
+  actions.appendChild(copyBtn);
+  shell.appendChild(actions);
+
+  const preview = document.createElement("pre");
+  preview.className = "preview";
+  preview.id = "preview";
+  preview.textContent = markdown;
+  shell.appendChild(preview);
+
+  container.replaceChildren(shell);
 
   async function doCopy() {
     await copyText(preview.textContent);
@@ -45,10 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function doShare() {
     const text = preview.textContent.trim();
-    const title = extractTitle(text);
+    const titleText = extractTitle(text);
 
     if (navigator.share) {
-      await navigator.share({ title, text });
+      await navigator.share({ title: titleText, text });
       flashButtonState(shareBtn, "Shared");
       return;
     }
